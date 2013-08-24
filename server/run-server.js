@@ -1,46 +1,43 @@
-var http = require('http');
-// var mongodb = require('mongodb');
-// var mongodbServer = new mongodb.Server('localhost', 27017, {auto_reconnect: true, poolSize: 10});
-// var db = new mongodb.Db('mydb', mongodbServer);
+if (!process.env.NODE_ENV) process.env.NODE_ENV='development'
 
-// var dbData;
-// function openDB() {
-//     db.open(function(err, db) {
-// 		/* Select 'contact' collection */
-// 	    db.collection('contact', function(err, collection) {
-// 	        /* Insert a data */
-// 	        collection.insert({
-// 	            name: 'Fred Chien',
-// 	            email: 'cfsghost@gmail.com',
-// 	            tel: [
-// 	                '0926xxx5xx',
-// 	                '0912xx11xx'
-// 	            ]
-// 	        }, function(err, data) {
-// 	            if (data) {
-// 	            	console.log(data);
-// 	                console.log('Successfully Insert');
-// 	            } else {
-// 	                console.log('Failed to Insert');
-// 	            }
-// 	        });
+var express = require('express'), 
+	http = require('http'), 
+	path = require('path'), 
+	colors = require('colors'),
+	reload = require('reload');
 
-// 	        /* Querying */
-// 	        collection.find({ name: 'Fred Chien' }, function(err, data) {
-// 	            /* Found this People */
-// 	            if (data) {
-// 	            	console.log(data);
-// 	            	dbData = data;
-// 	                console.log('Name: ' + data.name + ', email: ' + data.email);
-// 	            } else {
-// 	                console.log('Cannot found');
-// 	            }
-// 	        });
-// 	    });
-//     });
-// }
+var timeLog = require('./time-log.js');
+var app = express();
 
-http.createServer(function (request, response) {
-	response.writeHead(200, {'Content-Type': 'text/plain'});
- 	response.end("hello world");
-}).listen(8000);
+var webDir = path.join(__dirname, '../web-content')
+
+app.configure(function() {
+	app.set('port', process.env.PORT || 8000);
+	app.use(express.favicon());
+	app.use(express.logger('dev'));
+	app.use(express.bodyParser());
+	app.use(app.router);
+	app.use(express.static(webDir));
+});
+
+app.configure('development', function() {
+	app.use(express.errorHandler());
+})
+
+app.get('/', function(req, res) {
+	res.sendfile(path.join(webDir, 'index.html'));
+});
+
+// app.post('/create', timeLog.create);
+// app.get('/read', timeLog.read); //sometimes called 'show'
+// app.put('/update/:id', timeLog.update);
+// app.del('/delete/:id', timeLog.delete);
+
+var server = http.createServer(app);
+reload(server, app);
+server.listen(app.get('port'), function() {
+	console.log("Web server listening in %s on port %d", colors.red(process.env.NODE_ENV), app.get('port'));
+});
+
+
+

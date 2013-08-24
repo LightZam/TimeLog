@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html ng-app="timelog">
+<head>
+  <!-- libary -->
+  <script type="text/javascript" src="lib/jquery-2.0.3.js"></script>
+  <script type="text/javascript" src="lib/angular.js"></script>
+  <script type="text/javascript" src="lib/ui-bootstrap-calendar-0.1.0.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+
+  <!-- logic js -->
+	<script type="text/javascript" src="js/time.js"></script>
+  <!-- css -->
+  <link rel="stylesheet" type="text/css" href="css/timelog.css">
+
+	<title>Timelog</title>
+</head>
+<body>
+  <h2 class="title">Timelog</h2>
+  <div ng-controller="CalendarCtrl" class="calendar">
+    <div class="well well-small pull-left" ng-model="dt">
+        <datepicker min="minDate" show-weeks="showWeeks"></datepciker>
+    </div>
+  </div>
+</body>
+</html>

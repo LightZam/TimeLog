@@ -1,0 +1,30 @@
+.title {
+	text-align: center;
+	display: block;
+	padding: 20px;
+	margin: 0 0 10px;
+	line-height: 20px;
+	word-break: break-all;
+	word-wrap: break-word;
+	white-space: pre;
+	white-space: pre-wrap;
+	background-color: #f5f5f5;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.calendar {
+	/*background-color: #D6D6D6;*/
+	margin: 0 0 0 32%;
+	/*text-align: center;*/
+}
+
+.calendar-item {
+	/*border: 1px solid #CCCCCC;*/
+	padding: 33px;
+	cursor: pointer;
+	border-collapse: collapse;
+}
