@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html ng-app="timelog">
+<head>
+  <!-- libary -->
+  <script src="//www.google.com/jsapi"></script>
+  <script type="text/javascript" src="lib/jquery-2.0.3.js"></script>
+  <script type="text/javascript" src="lib/angular.js"></script>
+  <script type="text/javascript" src="lib/ui-bootstrap-calendar-0.1.0.js"></script>
+  <script type="text/javascript" src="lib/ng-google-chart.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+
+  <!-- logic js -->
+	<script type="text/javascript" src="js/time.js"></script>
+  <script type="text/javascript" src="js/signin.js"></script>
+  <!-- css -->
+  <link rel="stylesheet" type="text/css" href="css/timelog.css">
+  <link rel="stylesheet" type="text/css" href="css/user.css">
+
+	<title>Timelog</title>
+</head>
+<body onselectstart=event.returnValue=false>
+  <div class="top-bar">
+    <div class="title">Timelog</div>
+    <div class="designed-by"sytle="float: right;">Designed by Zam</div>
+  </div>
+  <div ng-controller="UserCtrl">
+    <!--Login page-->
+    <div class="signin-box" ng-show="signinMode">
+      <div class="signin-header">
+        <h3>SIGN IN</h3>
+      </div> 
+      <div class="signin-body">
+        <form name="signinForm">
+          <div>
+            <input type="text" class="big-input" ng-model="user.account" size="30" placeholder="Account">
+          </div>
+          <div>
+            <input type="text" class="big-input" ng-model="user.password" size="30" placeholder="Password">
+          </div>
+<!--           <div>
+            <input type="submit" class="btn btn-right-down" value="SIGN IN"/>
+          </div> -->
+        </form>
+      </div>
+      <div class="signin-footer">
+        <div class="left-side" ng-click="signup()">
+          SIGN UP
+        </div>
+        <div class="right-side" ng-click="signin()">
+          SIGN IN
+        </div>
+      </div>
+    </div>
+    <!--Register page-->
+    <div class="signin-box" ng-hide="signinMode">
+      <div class="signin-header">
+        <h3>SIGN UP</h3>
+      </div> 
+      <div class="signin-body">
+        <form name="signupForm" ng-submit="signup()">
+          <div>
+            <input type="text" class="big-input" ng-model="user.account" size="30" placeholder="Account">
+          </div>
+          <div>
+            <input type="text" class="big-input" ng-model="user.password" size="30" placeholder="Password">
+          </div>
+          <div>
+            <input type="text" class="big-input" ng-model="user.name" size="30" placeholder="NickName">
+          </div>
+<!--           <div>
+            <input type="submit" class="btn btn-right-down" value="SIGN IN"/>
+          </div> -->
+        </form>
+      </div>
+      <div class="signin-footer">
+        <div class="left-side" ng-click="signin()">
+          SIGN IN
+        </div>
+        <div class="right-side" ng-click="signup()">
+          SIGN UP
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
