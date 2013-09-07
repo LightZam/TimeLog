@@ -5,33 +5,48 @@ var express = require('express'),
 	path = require('path'), 
 	colors = require('colors'),
 	reload = require('reload');
-
-var timeLog = require('./time-log.js');
+var timeLog = require('./timelog.js');
 var app = express();
+var webDir = path.join(__dirname, '../web-content');
 
-var webDir = path.join(__dirname, '../web-content')
+// db connect
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/Timelog_Develop');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback() {});
+var MemStore = express.session.MemoryStore;
 
 app.configure(function() {
 	app.set('port', process.env.PORT || 8000);
 	app.use(express.favicon());
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
-	app.use(app.router);
 	app.use(express.static(webDir));
+	app.use(express.cookieParser('timelog'));
+	app.use(express.session());
+	app.use(app.router);
 });
 
 app.configure('development', function() {
 	app.use(express.errorHandler());
-})
-
-app.get('/', function(req, res) {
-	res.sendfile(path.join(webDir, 'index.html'));
 });
 
-// app.post('/create', timeLog.create);
-// app.get('/read', timeLog.read); //sometimes called 'show'
-// app.put('/update/:id', timeLog.update);
-// app.del('/delete/:id', timeLog.delete);
+function checkAuth(req, res, next) {
+	if (!req.session.user) {
+		res.sendfile(path.join(webDir, 'signin.html'));
+	} else {
+		next();
+	}
+}
+
+app.get('/', checkAuth, function(req, res) {
+	res.sendfile(path.join(webDir, 'main.html'));
+});
+app.post('/signup', timeLog.signup);
+app.post('/signin', timeLog.signin, function(req, res) {
+	res.redirect('/');
+});
 
 var server = http.createServer(app);
 reload(server, app);

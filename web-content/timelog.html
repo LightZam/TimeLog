@@ -1,0 +1,21 @@
+<div ng-controller="CalendarCtrl">
+	<div class="left-sider">
+		<ul>
+			<li>{{dt | date:'fullDate'}}</li>
+		</ul>
+	</div>
+  <div class="calendar-view" ng-model="dt"><calendar min="minDate" show-weeks="showWeeks"></calendar></div>
+  <div class="right-sider" ng-modal="hour">
+	  <table class="hour-calendar">
+	    <tbody>
+	      <tr ng-repeat="hour in hours" class="hour-item">
+	        <td class="hour-label">{{hour}}</td>
+	        <td class="">
+	        	<div style="border: 1px dashed #DDDDDD;"><span ng-class="{muted: hour.secondary}"></span></div>
+	        	<div><span ng-class="{muted: hour.secondary}"></span></div>
+	        </td>
+	      </tr>
+	    </tbody>
+	  </table>
+  </div>
+</div>

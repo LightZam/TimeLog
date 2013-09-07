@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html ng-app="timelog">
+<html ng-app="timelog" data-ng-csp>
 <head>
   <!-- libary -->
   <script src="//www.google.com/jsapi"></script>
@@ -35,12 +35,15 @@
             <input type="text" class="big-input" ng-model="user.account" size="30" placeholder="Account">
           </div>
           <div>
-            <input type="text" class="big-input" ng-model="user.password" size="30" placeholder="Password">
+            <input type="password" class="big-input" ng-model="user.password" size="30" placeholder="Password">
           </div>
 <!--           <div>
             <input type="submit" class="btn btn-right-down" value="SIGN IN"/>
           </div> -->
         </form>
+        <div class="sign-error">
+          {{error}}
+        </div>
       </div>
       <div class="signin-footer">
         <div class="left-side" ng-click="signup()">
@@ -57,7 +60,7 @@
         <h3>SIGN UP</h3>
       </div> 
       <div class="signin-body">
-        <form name="signupForm" ng-submit="signup()">
+        <form name="signupForm">
           <div>
             <input type="text" class="big-input" ng-model="user.account" size="30" placeholder="Account">
           </div>

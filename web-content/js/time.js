@@ -1,90 +1,20 @@
-angular.module('timelog', ['ui.bootstrap']);
-function TodoCtrl($scope, $http) {
-    $scope.todos = [
-        {text:'learn angular', done:true},
-        {text:'build an angular app', done:false}];
- 
-    $scope.addTodo = function() {
-        $scope.todos.push({text:$scope.todoText, done:false});
-        $scope.todoText = '';
-        $scope.form = {};
-        $http.post('/create', {name : 'Zam', password : 123})
-        .success(function(data) {
-            $location.path('/');
-            console.log('create');
-        });
-    };
- 
-    $scope.remaining = function() {
-        var count = 0;
-        angular.forEach($scope.todos, function(todo) {
-            count += todo.done ? 0 : 1;
-        });
-        return count;
-    };
- 
-    $scope.archive = function() {
-        $http.get('/read')
-        .success(function(data) {
-            $location.path('/');
-            console.log('read');
-        });
-    };
-}
+var TimelogApp = angular.module('timelog', ['ui.bootstrap.zam.calendar']);
+
+TimelogApp.config(function($routeProvider, $locationProvider) {
+    $routeProvider
+        .when('/', { controller: CalendarCtrl, templateUrl: '/timelog.html' }) 
+        .when('/signin', { controller: UserCtrl, templateUrl: '/signin.html' })
+        .otherwise({redirectTo: '/'});
+    $locationProvider.html5Mode(true);
+});
+
 
 function CalendarCtrl($scope, $timeout) {
-  // $scope.today = function() {
-  //   $scope.dt = new Date();
-  // };
-  // $scope.today();
-
-  // $scope.showWeeks = true;
-  // $scope.toggleWeeks = function () {
-  //   $scope.showWeeks = ! $scope.showWeeks;
-  // };
-
-  // $scope.clear = function () {
-  //   $scope.dt = null;
-  // };
-
-  // // Disable weekend selection
-  // $scope.disabled = function(date, mode) {
-  //   return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-  // };
-
-  // $scope.toggleMin = function() {
-  //   $scope.minDate = ( $scope.minDate ) ? null : new Date();
-  // };
-  // $scope.toggleMin();
-
-  // $scope.open = function() {
-  //   $timeout(function() {
-  //     $scope.opened = true;
-  //   });
-  // };
-
-  // $scope.dateOptions = {
-  //   'year-format': "'yy'",
-  //   'starting-day': 1
-  // };
+    $scope.hours = ['0 am', '1 am', '2 am', '3 am', '4 am', '5 am', '6 am', '7 am', '8 am', '9 am', '10 am', '11 am',
+                    '12 pm', '1 pm', '2 pm', '3 pm', '4 pm', '5 pm', '6 pm', '7 pm', '8 pm', '9 pm', '10 pm', '11 pm'];
+    console.log($scope.dt);
 };
 
-var ModalDemoCtrl = function ($scope) {
 
-  $scope.open = function () {
-    $scope.shouldBeOpen = true;
-  };
 
-  $scope.close = function () {
-    $scope.closeMsg = 'I was closed at: ' + new Date();
-    $scope.shouldBeOpen = false;
-  };
 
-  $scope.items = ['item1', 'item2'];
-
-  $scope.opts = {
-    backdropFade: true,
-    dialogFade:true
-  };
-
-};

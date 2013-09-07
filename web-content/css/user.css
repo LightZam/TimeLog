@@ -36,7 +36,7 @@ div-right-down {
 	overflow-y: auto;
 }
 
-.signin-body input[type="text"] {
+.signin-body input[type="text"], input[type="password"] {
 	height: 30px;
 	font-size: 25px;
 	padding: 15px 6px 5px 10px;
@@ -121,4 +121,9 @@ div-right-down {
   -webkit-box-shadow: none;
      -moz-box-shadow: none;
           box-shadow: none;
+}
+
+.sign-error {
+	text-align: right;
+	color: #FF6B6B;
 }
