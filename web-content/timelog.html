@@ -1,21 +1,44 @@
 <div ng-controller="CalendarCtrl">
 	<div class="left-sider">
-		<ul>
-			<li>{{dt | date:'fullDate'}}</li>
+		<ul class="chat-view">
+			<li class="chat-title">
+				<div style="background-color: #4D9C9E; width: 20%; height: 100%; float: left;"></div>
+<!-- 				<div style="font-size:32px; padding: 7.5% 0 0 25%;">{{online}} / {{total}} Online</div>			 -->	
+				<div style="font-size:32px; padding: 7.5% 0 0 25%;">{{today | date:'yyyy-MM-dd'}}</div>
+			</li>
+			<li class="chat-title">
+				<div style="background-color: #2F6BB7; width: 20%; height: 100%; float: left;"></div>
+				<div style="font-size:26px; padding: 7.5% 0 0 25%; cursor: pointer;" ng-click="manageType()">
+					<span style="left: 5%; position: relative; top: 35%;">
+  					Event Type
+  				</span>
+				</div>
+			</li>			
+			<li ng-repeat="chat in chats" class="chat-body">
+				<div style="width: 20%; height: 100%;"></div>
+				<div style="background-color: #4D9C9E; width: 2%; height: 100%;"></div>
+				<div>Lab1321</div>
+			</li>
 		</ul>
 	</div>
-  <div class="calendar-view" ng-model="dt"><calendar min="minDate" show-weeks="showWeeks"></calendar></div>
+  <div class="calendar-view" ng-model="date"><calendar min="minDate" show-weeks="showWeeks"></calendar></div>
   <div class="right-sider" ng-modal="hour">
 	  <table class="hour-calendar">
 	    <tbody>
 	      <tr ng-repeat="hour in hours" class="hour-item">
 	        <td class="hour-label">{{hour}}</td>
-	        <td class="">
-	        	<div style="border: 1px dashed #DDDDDD;"><span ng-class="{muted: hour.secondary}"></span></div>
-	        	<div><span ng-class="{muted: hour.secondary}"></span></div>
+	        <td class="hour-item">
+	  				<div class="drag-hour-wrap"></div>
+	        	<div class="before-half-hour-item" ng-mousedown="mouseDown($event)" ng-mouseup="mouseUp($event)" ng-mouseover="mouseOver($event)">
+	        		<span ng-class="{'muted': hour.secondary}"></span>
+	        	</div>
+	        	<div class="after-half-hour-item " ng-mousedown="mouseDown($event)" ng-mouseup="mouseUp($event)" ng-mouseover="mouseOver($event)">
+	        		<span ng-class="{'muted': hour.secondary}"></span>
+	        	</div>
 	        </td>
 	      </tr>
 	    </tbody>
 	  </table>
+	  </div>
   </div>
 </div>

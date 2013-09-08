@@ -9,8 +9,8 @@ var TimelogSchema = new Schema({
 	deltaTime: String,
 	interruptTime: String,
 	description: String,
-    User: [{ type: Schema.Types.ObjectId, ref: 'User' }],
-    eventType: [{ type: Schema.Types.ObjectId, ref: 'EventType' }]
+    User: { type: String, require: true },
+    eventType: { type: String, require: true }
 });   
 
 module.exports = mongoose.model('Timelog', TimelogSchema);

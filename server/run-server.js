@@ -5,7 +5,7 @@ var express = require('express'),
 	path = require('path'), 
 	colors = require('colors'),
 	reload = require('reload');
-var timeLog = require('./timelog.js');
+var timelog = require('./timelog.js');
 var app = express();
 var webDir = path.join(__dirname, '../web-content');
 
@@ -19,7 +19,7 @@ var MemStore = express.session.MemoryStore;
 
 app.configure(function() {
 	app.set('port', process.env.PORT || 8000);
-	app.use(express.favicon());
+    app.use(express.favicon(path.join(__dirname, '/favicon/favicon.ico')));
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
 	app.use(express.static(webDir));
@@ -41,12 +41,15 @@ function checkAuth(req, res, next) {
 }
 
 app.get('/', checkAuth, function(req, res) {
-	res.sendfile(path.join(webDir, 'main.html'));
+	res.sendfile(path.join(webDir, 'app.html'));
 });
-app.post('/signup', timeLog.signup);
-app.post('/signin', timeLog.signin, function(req, res) {
-	res.redirect('/');
-});
+
+app.post('/signup', timelog.signup);
+app.post('/signin', timelog.signin);
+app.post('/add/eventType', checkAuth, timelog.addEventType);
+app.put('/edit/eventType', checkAuth, timelog.editEventType);
+app.get('/get/eventType', checkAuth, timelog.getEventType);
+app.post('/add/timelog', checkAuth, timelog.addTimelog);
 
 var server = http.createServer(app);
 reload(server, app);

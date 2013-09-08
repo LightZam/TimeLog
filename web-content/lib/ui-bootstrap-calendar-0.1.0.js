@@ -99,6 +99,36 @@ dialogModule.controller('MessageBoxController', ['$scope', 'dialog', 'model',
             dialog.close(res);
         };
     }
+])
+.controller('TimelogController', ['$scope', '$http', '$filter', 'dialog', 'model',
+    function($scope, $http, $filter, dialog, model) {
+        $scope.date = model.date;
+        $http.get('/get/eventType').success(function(result) {
+            if (result.length > 0) {
+                $scope.types = result;
+                $scope.type = result[0];
+            }
+        });
+
+        $scope.close = function() {
+            dialog.close();
+        }
+
+        $scope.addTimelog = function() {
+            if (!($scope.startHour && $scope.startMin && $scope.endHour && $scope.endMin)) {
+                console.log('error');
+                $scope.error = 'Please, input the time period and event type.'
+                return;
+            }
+            var data = new Object();
+            data.date = $filter('date')($scope.date, 'yyyy-MM-dd');
+            data.startTime = [$scope.startHour, $scope.startMin].join(':');
+            data.endTime = [$scope.endHour, $scope.endMin].join(':');
+            data.eventType = $scope.type._id;
+            data.description = $scope.description;
+            console.log(data);
+        }
+    }
 ]);
 
 dialogModule.provider("$dialog", function() {
@@ -614,7 +644,6 @@ angular.module('ui.bootstrap.calendar', ['ui.bootstrap.position'])
         };
     }
 ])
-
 .directive('calendar', ['dateFilter', '$parse', 'calendarConfig', '$log', '$dialog',
     function(dateFilter, $parse, calendarConfig, $log, $dialog) {
         return {
@@ -629,6 +658,7 @@ angular.module('ui.bootstrap.calendar', ['ui.bootstrap.position'])
             link: function(scope, element, attrs, ctrls) {
                 var calendarCtrl = ctrls[0],
                     ngModel = ctrls[1];
+                var timelogDialog;
 
                 if (!ngModel) {
                     return; // do nothing if no ng-model
@@ -709,29 +739,40 @@ angular.module('ui.bootstrap.calendar', ['ui.bootstrap.position'])
                 };
 
                 scope.select = function(date) {
-                    var diaglogOpts = {
-                        backdrop: false,
-                        keyboard: true,
-                        backdropClick: true,
-                        templateUrl: '../template/dialog/timelog-modal.html' // OR : template:  t,
-                        // controller: 'dialogController'
-                    };
-                    selected = date;
-                    var d = $dialog.dialog(diaglogOpts);
-                    d.open().then(function(result) {});
-                    console.log(date);
-
+                    if (timelogDialog) timelogDialog.close();
+                    showTimelogDialog(date);
                     var dt = new Date(ngModel.$modelValue);
                     dt.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
                     ngModel.$setViewValue(dt);
                     refill(true);
                 };
+
+                function showTimelogDialog(date) {
+                    var diaglogOpts = {
+                        backdrop: false,
+                        keyboard: true,
+                        backdropClick: true,
+                        templateUrl: '../template/dialog/timelog-modal.html', // OR : template:  t,
+                        controller: 'TimelogController',
+                        resolve: {
+                            model: function() {
+                                return {
+                                    date: date
+                                };
+                            }
+                        }
+                    };
+                    timelogDialog = $dialog.dialog(diaglogOpts);
+                    timelogDialog.open().then(function(result) {});
+                }
+
                 scope.move = function(direction) {
                     var step = calendarCtrl.modes[mode].step;
                     selected.setMonth(selected.getMonth() + direction * (step.months || 0));
                     selected.setFullYear(selected.getFullYear() + direction * (step.years || 0));
                     refill();
                 };
+                
                 scope.getWeekNumber = function(row) {
                     return (mode === 0 && scope.showWeekNumbers && row.length === 7) ? getISO8601WeekNumber(row[0].date) : null;
                 };

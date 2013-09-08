@@ -1,3 +1,41 @@
+/* scroll bar style */
+::-webkit-scrollbar {
+	height: 16px;
+	overflow: visible;
+	width: 16px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgba(0,0,0,.2);
+	background-clip: padding-box;
+	border: solid transparent;
+	border-width: 0 0 0 7px;
+	min-height: 28px;
+	padding: 100px 0 0;
+	box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset -1px -1px 0 rgba(0,0,0,.07);
+}
+
+::-webkit-scrollbar-button {
+	height: 0;
+	width: 0;
+}
+
+::-webkit-scrollbar-track {
+	background-clip: padding-box;
+	border: solid transparent;
+	border-width: 0 0 0 7px;
+}
+
+::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+/* btn style */
+.btn {
+	margin-bottom: 10px;
+}
+
+/* top bar style */
 .top-bar {
 	text-align: center;
 	display: block;
@@ -26,6 +64,7 @@
 	float: right;
 }
 
+/* main page left side style */
 .left-sider {
 	border-right: 1px solid #CCCCCC;
  	position: fixed; 
@@ -35,6 +74,7 @@
  	width: 23%;
 }
 
+/* main page right side style */
 .right-sider {
 	border-left: 1px solid #CCCCCC;
  	position: fixed; 
@@ -44,6 +84,7 @@
  	width: 25%;
 }
 
+/* canlendar style */
 .calendar-view {
 	position: fixed;
  	right: 26%;
@@ -82,6 +123,13 @@
 	background: #356194;
 }
 
+.calendar-item-selected {
+	background-color: #3F9AB7;
+	color: #FFFFFF;
+}
+
+
+/* hour canlendar style */
 .hour-calendar {
 	width: 100%;
 	height: 100%;
@@ -101,10 +149,86 @@
 .hour-label {
 	text-align: right;
 	border-right: 1px solid #CCCCCC;
-	width: 15%;
+	width: 60px;
+	vertical-align: top;
 }
 
-.calendar-item-selected {
+.hour-item {
+	padding: 0;
+}
+
+.hour-item-selected {
 	background-color: #3F9AB7;
-	color: #FFFFFF;
+	border: 0px;
+}
+
+.before-half-hour-item {
+	border-bottom: 1px dashed #DDDDDD; 
+	height: 50%;
+}
+
+.after-half-hour-item {
+	height: 50%;
+}
+
+.drag-hour-wrap {
+	background-color: #3F9AB7;
+	width: 100%;
+	position: absolute;
+	height: 0px;
+	z-index: 1;
+	opacity: .8;
+}
+
+/* chat view */
+.chat-view {
+	list-style-type: none;
+	height: 100%;
+	margin: 0;
+}
+
+.chat-title {
+	border-bottom: 1px solid #CCCCCC;
+	height: 10%;
+}
+
+.chat-body {
+	border-bottom: 1px solid #CCCCCC;
+	height: 10%;
+}
+
+/* event-type-modal */
+.event-type-list {
+	list-style-type: none; 
+	margin: 0;
+}
+
+.event-type-list li {
+	font-size: 20px; 
+	padding: 3% 0;
+	cursor: pointer;
+}
+
+.event-type-list li:hover {
+	background-color: #DDDDDD;
+}
+
+/* timelog modal style */
+.timelog-modal-body {
+
+}
+
+.timelog-modal-body div {
+	font-size: 18px;
+	padding: 10px 0;
+}
+
+.timelog-modal-body div .title {
+	width: 20%;
+	float: left;
+	margin-top: 5px;
+}
+
+.timelog-modal-body div input {
+	margin: 0px;
 }

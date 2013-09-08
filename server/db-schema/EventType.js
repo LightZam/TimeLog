@@ -3,9 +3,9 @@ var Schema = mongoose.Schema;
 
 // 事件名稱的DB
 var EventTypeSchema = new Schema({
-    name: String,
-    enable: { type: Boolean, default: false },
-    user: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+    name: { type: String, require: true },
+    enable: { type: Boolean, default: true },
+    user: { type: String, require: true }
 });
 
 module.exports = mongoose.model('EventType', EventTypeSchema);
