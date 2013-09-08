@@ -7,6 +7,7 @@ var TimelogSchema = new Schema({
 	startTime: { type: String, require: true },
 	endTime: { type: String, require: true },
 	deltaTime: String,
+	durationTime: String,
 	interruptTime: String,
 	description: String,
     User: { type: String, require: true },

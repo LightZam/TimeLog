@@ -100,36 +100,67 @@ dialogModule.controller('MessageBoxController', ['$scope', 'dialog', 'model',
         };
     }
 ])
-.controller('TimelogController', ['$scope', '$http', '$filter', 'dialog', 'model',
-    function($scope, $http, $filter, dialog, model) {
-        $scope.date = model.date;
-        $http.get('/get/eventType').success(function(result) {
-            if (result.length > 0) {
-                $scope.types = result;
-                $scope.type = result[0];
-            }
-        });
+    .controller('TimelogController', ['$scope', '$http', '$filter', 'dialog', 'model',
+        function($scope, $http, $filter, dialog, model) {
+            $scope.date = model.date;
+            $http.get('/get/eventType').success(function(result) {
+                if (result.length > 0) {
+                    $scope.types = result;
+                    $scope.type = result[0];
+                }
+            });
 
-        $scope.close = function() {
-            dialog.close();
-        }
-
-        $scope.addTimelog = function() {
-            if (!($scope.startHour && $scope.startMin && $scope.endHour && $scope.endMin)) {
-                console.log('error');
-                $scope.error = 'Please, input the time period and event type.'
-                return;
+            $scope.close = function() {
+                dialog.close();
             }
-            var data = new Object();
-            data.date = $filter('date')($scope.date, 'yyyy-MM-dd');
-            data.startTime = [$scope.startHour, $scope.startMin].join(':');
-            data.endTime = [$scope.endHour, $scope.endMin].join(':');
-            data.eventType = $scope.type._id;
-            data.description = $scope.description;
-            console.log(data);
+
+            $scope.addTimelog = function() {
+                if (!($scope.startHour && $scope.startMin && $scope.endHour && $scope.endMin)) {
+                    console.log('error');
+                    $scope.error = 'Please, input the time period and event type.'
+                    return;
+                }
+                var data = new Object();
+                data.date = $filter('date')($scope.date, 'yyyy-MM-dd');
+                data.startTime = [$scope.startHour, $scope.startMin].join(':');
+                data.endTime = [$scope.endHour, $scope.endMin].join(':');
+                var startDate = [data.date, data.startTime].join(' ');
+                var endDate = [data.date, data.endTime].join(' ');
+                data.interruptTime = $scope.interrupt;
+                var interruptTime = data.interruptTime * 60 * 1000;
+                data.deltaTime = calDeltaTime(startDate, endDate, interruptTime);
+                data.durationTime = calDurationTime(startDate, endDate, interruptTime);
+                data.eventType = $scope.type._id;
+                data.description = $scope.description;
+                $http.post('add/timelog', data).success(function(result) {
+                    if (result == 'Success') {
+                        $scope.close();
+                    }
+                });
+            }
+
+            function calDeltaTime(startDate, endDate, interruptTime) {
+                var dateStart = new Date(startDate).getTime();
+                var dateEnd = new Date(endDate).getTime();
+                var datePeriod = new Date(dateEnd - dateStart - interruptTime);
+                var hour = datePeriod.getUTCHours();
+                var min = datePeriod.getUTCMinutes();
+                if (hour.toString().length <= 1) {
+                    hour = [0, hour].join('');
+                }
+                if (min.toString().length <= 1) {
+                    min = [0, min].join('');
+                }
+                return [hour, min].join(':');
+            }
+
+            function calDurationTime(startDate, endDate, interruptTime) {
+                var dateStart = new Date(startDate);
+                var dateEnd = new Date(endDate);
+                return dateEnd.getTime() - dateStart.getTime() - interruptTime;
+            }
         }
-    }
-]);
+    ]);
 
 dialogModule.provider("$dialog", function() {
 
@@ -644,148 +675,157 @@ angular.module('ui.bootstrap.calendar', ['ui.bootstrap.position'])
         };
     }
 ])
-.directive('calendar', ['dateFilter', '$parse', 'calendarConfig', '$log', '$dialog',
-    function(dateFilter, $parse, calendarConfig, $log, $dialog) {
-        return {
-            restrict: 'EA',
-            replace: true,
-            templateUrl: '../template/calendar/calendar.html',
-            scope: {
-                dateDisabled: '&'
-            },
-            require: ['calendar', '?^ngModel'],
-            controller: 'CalendarController',
-            link: function(scope, element, attrs, ctrls) {
-                var calendarCtrl = ctrls[0],
-                    ngModel = ctrls[1];
-                var timelogDialog;
+    .directive('calendar', ['dateFilter', '$parse', 'calendarConfig', '$log', '$dialog', '$timeout',
+        function(dateFilter, $parse, calendarConfig, $log, $dialog, $timeout) {
+            return {
+                restrict: 'EA',
+                replace: true,
+                templateUrl: '../template/calendar/calendar.html',
+                scope: {
+                    dateDisabled: '&'
+                },
+                require: ['calendar', '?^ngModel'],
+                controller: 'CalendarController',
+                link: function(scope, element, attrs, ctrls) {
+                    var calendarCtrl = ctrls[0],
+                        ngModel = ctrls[1];
+                    var timelogDialog;
 
-                if (!ngModel) {
-                    return; // do nothing if no ng-model
-                }
+                    if (!ngModel) {
+                        return; // do nothing if no ng-model
+                    }
 
-                // Configuration parameters
-                var mode = 0,
-                    selected = new Date(),
-                    showWeeks = calendarConfig.showWeeks;
+                    // Configuration parameters
+                    var mode = 0,
+                        selected = new Date(),
+                        showWeeks = calendarConfig.showWeeks;
 
-                if (attrs.showWeeks) {
-                    scope.$parent.$watch($parse(attrs.showWeeks), function(value) {
-                        showWeeks = !! value;
+                    if (attrs.showWeeks) {
+                        scope.$parent.$watch($parse(attrs.showWeeks), function(value) {
+                            showWeeks = !! value;
+                            updateShowWeekNumbers();
+                        });
+                    } else {
                         updateShowWeekNumbers();
-                    });
-                } else {
-                    updateShowWeekNumbers();
-                }
-
-                if (attrs.min) {
-                    scope.$parent.$watch($parse(attrs.min), function(value) {
-                        calendarCtrl.minDate = value ? new Date(value) : null;
-                        refill();
-                    });
-                }
-                if (attrs.max) {
-                    scope.$parent.$watch($parse(attrs.max), function(value) {
-                        calendarCtrl.maxDate = value ? new Date(value) : null;
-                        refill();
-                    });
-                }
-
-                function updateShowWeekNumbers() {
-                    scope.showWeekNumbers = mode === 0 && showWeeks;
-                }
-
-                // Split array into smaller arrays
-
-                function split(arr, size) {
-                    var arrays = [];
-                    while (arr.length > 0) {
-                        arrays.push(arr.splice(0, size));
                     }
-                    return arrays;
-                }
 
-                function refill(updateSelected) {
-                    var date = null,
-                        valid = true;
+                    if (attrs.min) {
+                        scope.$parent.$watch($parse(attrs.min), function(value) {
+                            calendarCtrl.minDate = value ? new Date(value) : null;
+                            refill();
+                        });
+                    }
+                    if (attrs.max) {
+                        scope.$parent.$watch($parse(attrs.max), function(value) {
+                            calendarCtrl.maxDate = value ? new Date(value) : null;
+                            refill();
+                        });
+                    }
 
-                    if (ngModel.$modelValue) {
-                        date = new Date(ngModel.$modelValue);
+                    function updateShowWeekNumbers() {
+                        scope.showWeekNumbers = mode === 0 && showWeeks;
+                    }
 
-                        if (isNaN(date)) {
-                            valid = false;
-                            $log.error('calendar directive: "ng-model" value must be a Date object, a number of milliseconds since 01.01.1970 or a string representing an RFC2822 or ISO 8601 date.');
-                        } else if (updateSelected) {
-                            selected = date;
+                    // Split array into smaller arrays
+
+                    function split(arr, size) {
+                        var arrays = [];
+                        while (arr.length > 0) {
+                            arrays.push(arr.splice(0, size));
                         }
+                        return arrays;
                     }
-                    ngModel.$setValidity('date', valid);
 
-                    var currentMode = calendarCtrl.modes[mode],
-                        data = currentMode.getVisibleDates(selected, date);
-                    angular.forEach(data.objects, function(obj) {
-                        obj.disabled = calendarCtrl.isDisabled(obj.date, mode);
-                    });
+                    function refill(updateSelected) {
+                        var date = null,
+                            valid = true;
 
-                    ngModel.$setValidity('date-disabled', (!date || !calendarCtrl.isDisabled(date)));
+                        if (ngModel.$modelValue) {
+                            date = new Date(ngModel.$modelValue);
 
-                    scope.rows = split(data.objects, currentMode.split);
-                    scope.labels = data.labels || [];
-                    scope.title = data.title;
-                }
-
-                ngModel.$render = function() {
-                    refill(true);
-                };
-
-                scope.select = function(date) {
-                    if (timelogDialog) timelogDialog.close();
-                    showTimelogDialog(date);
-                    var dt = new Date(ngModel.$modelValue);
-                    dt.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
-                    ngModel.$setViewValue(dt);
-                    refill(true);
-                };
-
-                function showTimelogDialog(date) {
-                    var diaglogOpts = {
-                        backdrop: false,
-                        keyboard: true,
-                        backdropClick: true,
-                        templateUrl: '../template/dialog/timelog-modal.html', // OR : template:  t,
-                        controller: 'TimelogController',
-                        resolve: {
-                            model: function() {
-                                return {
-                                    date: date
-                                };
+                            if (isNaN(date)) {
+                                valid = false;
+                                $log.error('calendar directive: "ng-model" value must be a Date object, a number of milliseconds since 01.01.1970 or a string representing an RFC2822 or ISO 8601 date.');
+                            } else if (updateSelected) {
+                                selected = date;
                             }
                         }
+                        ngModel.$setValidity('date', valid);
+
+                        var currentMode = calendarCtrl.modes[mode],
+                            data = currentMode.getVisibleDates(selected, date);
+                        angular.forEach(data.objects, function(obj) {
+                            obj.disabled = calendarCtrl.isDisabled(obj.date, mode);
+                        });
+
+                        ngModel.$setValidity('date-disabled', (!date || !calendarCtrl.isDisabled(date)));
+
+                        scope.rows = split(data.objects, currentMode.split);
+                        scope.labels = data.labels || [];
+                        scope.title = data.title;
+                    }
+
+                    ngModel.$render = function() {
+                        refill(true);
                     };
-                    timelogDialog = $dialog.dialog(diaglogOpts);
-                    timelogDialog.open().then(function(result) {});
-                }
 
-                scope.move = function(direction) {
-                    var step = calendarCtrl.modes[mode].step;
-                    selected.setMonth(selected.getMonth() + direction * (step.months || 0));
-                    selected.setFullYear(selected.getFullYear() + direction * (step.years || 0));
-                    refill();
-                };
-                
-                scope.getWeekNumber = function(row) {
-                    return (mode === 0 && scope.showWeekNumbers && row.length === 7) ? getISO8601WeekNumber(row[0].date) : null;
-                };
+                    scope.counter = 0;
+                    scope.clicked = true;
+                    scope.stopped = false;
+                    scope.select = function(date) {
+                        scope.showTimelogDialog(date);
+                        // scope.clicked = $timeout(function() {
+                        //     if (scope.stopped == false) {
+                        //         scope.counter = scope.counter + 1;
+                        //     }
+                        // }, 500);
+                        var dt = new Date(ngModel.$modelValue);
+                        dt.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
+                        ngModel.$setViewValue(dt);
+                        refill(true);
+                    };
 
-                function getISO8601WeekNumber(date) {
-                    var checkDate = new Date(date);
-                    checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7)); // Thursday
-                    var time = checkDate.getTime();
-                    checkDate.setMonth(0); // Compare with Jan 1
-                    checkDate.setDate(1);
-                    return Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 1;
+                    scope.showTimelogDialog = function(date) {
+                        // scope.stopped = $timeout.cancel(scope.clicked);
+                        if (timelogDialog) timelogDialog.close();
+                        var diaglogOpts = {
+                            backdrop: false,
+                            keyboard: true,
+                            backdropClick: true,
+                            templateUrl: '../template/dialog/timelog-modal.html', // OR : template:  t,
+                            controller: 'TimelogController',
+                            resolve: {
+                                model: function() {
+                                    return {
+                                        date: date
+                                    };
+                                }
+                            }
+                        };
+                        timelogDialog = $dialog.dialog(diaglogOpts);
+                        timelogDialog.open().then(function(result) {});
+                    }
+
+                    scope.move = function(direction) {
+                        var step = calendarCtrl.modes[mode].step;
+                        selected.setMonth(selected.getMonth() + direction * (step.months || 0));
+                        selected.setFullYear(selected.getFullYear() + direction * (step.years || 0));
+                        refill();
+                    };
+
+                    scope.getWeekNumber = function(row) {
+                        return (mode === 0 && scope.showWeekNumbers && row.length === 7) ? getISO8601WeekNumber(row[0].date) : null;
+                    };
+
+                    function getISO8601WeekNumber(date) {
+                        var checkDate = new Date(date);
+                        checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7)); // Thursday
+                        var time = checkDate.getTime();
+                        checkDate.setMonth(0); // Compare with Jan 1
+                        checkDate.setDate(1);
+                        return Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 1;
+                    }
                 }
-            }
-        };
-    }
-]);
+            };
+        }
+    ]);
