@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">	
+  <!-- libary -->
+  <script src="//www.google.com/jsapi"></script>
+  <script type="text/javascript" src="lib/jquery-2.0.3.js"></script>
+  <script type="text/javascript" src="lib/angular.js"></script>
+  <script type="text/javascript" src="lib/ui-bootstrap-calendar-0.1.0.js"></script>
+  <script type="text/javascript" src="lib/ng-google-chart.js"></script>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+
+  <!-- logic js -->
+	<script type="text/javascript" src="js/signin.js"></script>
+	<script type="text/javascript" src="js/time.js"></script>
+  <!-- css -->
+  <link rel="stylesheet" type="text/css" href="css/timelog.css">
+
+	<title>Timelog</title>
+</head>
+<body onselectstart=event.returnValue=false>
+  <div ng-app="timelog" class="containr">	
+    <div class="top-bar">
+      <div class="title">Timelog</div>
+      <div class="designed-by"sytle="float: right;">Designed by Zam</div>
+    </div>
+    <div ng-view>
+      <!-- The dynamic view -->
+    </div>
+  </div>
+</body>
+</html>
+

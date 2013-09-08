@@ -1,0 +1,129 @@
+.signin-box {
+	text-align: center;
+	margin: auto;
+	margin-top: 10%;
+	-webkit-margin-start: auto;
+	-webkit-margin-end: auto;
+	border: 1px solid #CCCCCC;
+	width: 30%;
+}
+
+div-right-down {
+	float:right;
+}
+
+.big-input {
+	height: 55px;
+	width: 250px;
+}
+
+.signin-header {
+	padding: 9px 15px;
+	border-bottom: 1px solid #eee;
+	background-color: #356194;
+	color: #ffffff;
+}
+
+.signin-header h3 {
+  margin: 7px;
+  line-height: 30px;
+}
+
+.signin-body {
+	position: relative;
+	max-height: 400px;
+	padding: 15px;
+	overflow-y: auto;
+}
+
+.signin-body input[type="text"], input[type="password"] {
+	height: 30px;
+	font-size: 25px;
+	padding: 15px 6px 5px 10px;
+	width: 75%;
+}
+
+.signin-body form {
+	margin: 15px 0;
+}
+
+.signin-footer {
+	width: 100%;
+	height: 60px;
+	border-top: 1px solid #CCCCCC;
+}
+
+.signin-footer .left-side {
+	width: 49%;
+	float: left;
+	border-right: 1px solid #CCCCCC;
+	padding: 20px 0;
+	cursor: pointer;
+}
+
+.signin-footer .right-side {
+	width: 50.5%;
+	float: right;
+	padding: 20px 0;
+	cursor: pointer;
+}
+
+.signin-footer div:hover,
+.signin-footer div:active,
+.signin-footer div.active,
+.signin-footer div.disabled,
+.signin-footer div[disabled] {
+  color: #333333;
+  background-color: #e6e6e6;
+  *background-color: #d9d9d9;
+}
+
+.signin-footer div:active,
+.signin-footer div.active {
+  background-color: #cccccc \9;
+}
+
+.signin-footer div:first-child {
+  *margin-left: 0;
+}
+
+.signin-footer div:hover {
+  color: #333333;
+  text-decoration: none;
+  background-position: 0 -15px;
+  -webkit-transition: background-position 0.1s linear;
+     -moz-transition: background-position 0.1s linear;
+       -o-transition: background-position 0.1s linear;
+          transition: background-position 0.1s linear;
+}
+
+.signin-footer div:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+
+.signin-footer div.active,
+.signin-footer div:active {
+  background-image: none;
+  outline: 0;
+  /*-webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+     -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);*/
+}
+
+.signin-footer div.disabled,
+.signin-footer div[disabled] {
+  cursor: default;
+  background-image: none;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+     -moz-box-shadow: none;
+          box-shadow: none;
+}
+
+.sign-error {
+	text-align: right;
+	color: #FF6B6B;
+}

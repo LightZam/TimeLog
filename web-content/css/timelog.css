@@ -1,0 +1,234 @@
+/* scroll bar style */
+::-webkit-scrollbar {
+	height: 16px;
+	overflow: visible;
+	width: 16px;
+}
+
+::-webkit-scrollbar-thumb {
+	background-color: rgba(0,0,0,.2);
+	background-clip: padding-box;
+	border: solid transparent;
+	border-width: 0 0 0 7px;
+	min-height: 28px;
+	padding: 100px 0 0;
+	box-shadow: inset 1px 1px 0 rgba(0,0,0,.1),inset -1px -1px 0 rgba(0,0,0,.07);
+}
+
+::-webkit-scrollbar-button {
+	height: 0;
+	width: 0;
+}
+
+::-webkit-scrollbar-track {
+	background-clip: padding-box;
+	border: solid transparent;
+	border-width: 0 0 0 7px;
+}
+
+::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+/* btn style */
+.btn {
+	margin-bottom: 10px;
+}
+
+/* top bar style */
+.top-bar {
+	text-align: center;
+	display: block;
+	padding: 20px;
+	margin: 0 0 10px;
+	line-height: 20px;
+	word-break: break-all;
+	word-wrap: break-word;
+/*	white-space: pre;
+	white-space: pre-wrap;*/
+	/*background-color: #f5f5f5;*/
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	-webkit-border-radius: 0px;
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+}
+
+.top-bar .title {
+	font-weight: bold;
+	font-size: 32px;
+}
+.top-bar .designed-by {
+	font-weight: bold;
+	font-size: 16px;
+	float: right;
+}
+
+/* main page left side style */
+.left-sider {
+	border-right: 1px solid #CCCCCC;
+ 	position: fixed; 
+ 	top: 62px;
+ 	bottom: 0;
+ 	left: 0;
+ 	width: 23%;
+}
+
+/* main page right side style */
+.right-sider {
+	border-left: 1px solid #CCCCCC;
+ 	position: fixed; 
+ 	top: 62px;
+ 	bottom: 0;
+ 	right: 0;
+ 	width: 25%;
+}
+
+/* canlendar style */
+.calendar-view {
+	position: fixed;
+ 	right: 26%;
+ 	width: 50%;
+	height: 100%;
+}
+
+.calendar {
+	/*background-color: #D6D6D6;*/
+	/*margin: 0 0 0 30%;*/
+	/*width: 100%;*/
+	/*text-align: center;*/
+	/*overflow: auto;*/
+	height: 100%;
+	width: 100%;
+}
+
+.calendar table {	
+/*	margin: auto;
+	-webkit-margin-start: auto;
+	-webkit-margin-end: auto;*/
+	width: 100%;
+	height: 88%;
+	margin: 1% 0;
+}
+
+.calendar-item {
+	border: 1px solid #CCCCCC;
+	cursor: pointer;
+	border-collapse: collapse;
+	width: 12%;
+	text-align: center;
+}
+
+.calendar-item.today {
+	background: #356194;
+}
+
+.calendar-item-selected {
+	background-color: #3F9AB7;
+	color: #FFFFFF;
+}
+
+
+/* hour canlendar style */
+.hour-calendar {
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+
+.hour-calendar tbody {
+	/*border-top: 1px solid #CCCCCC;*/
+}
+
+.hour-item {
+	width: 0%;
+	border-bottom: 1px solid #CCCCCC;
+	cursor: pointer;
+}
+
+.hour-label {
+	text-align: right;
+	border-right: 1px solid #CCCCCC;
+	width: 60px;
+	vertical-align: top;
+}
+
+.hour-item {
+	padding: 0;
+}
+
+.hour-item-selected {
+	background-color: #3F9AB7;
+	border: 0px;
+}
+
+.before-half-hour-item {
+	border-bottom: 1px dashed #DDDDDD; 
+	height: 50%;
+}
+
+.after-half-hour-item {
+	height: 50%;
+}
+
+.drag-hour-wrap {
+	background-color: #3F9AB7;
+	width: 100%;
+	position: absolute;
+	height: 0px;
+	z-index: 1;
+	opacity: .8;
+}
+
+/* chat view */
+.chat-view {
+	list-style-type: none;
+	height: 100%;
+	margin: 0;
+}
+
+.chat-title {
+	border-bottom: 1px solid #CCCCCC;
+	height: 10%;
+}
+
+.chat-body {
+	border-bottom: 1px solid #CCCCCC;
+	height: 10%;
+}
+
+/* event-type-modal */
+.event-type-list {
+	list-style-type: none; 
+	margin: 0;
+}
+
+.event-type-list li {
+	font-size: 20px; 
+	padding: 3% 0;
+	cursor: pointer;
+}
+
+.event-type-list li:hover {
+	background-color: #DDDDDD;
+}
+
+/* timelog modal style */
+.timelog-modal-body {
+
+}
+
+.timelog-modal-body div {
+	font-size: 18px;
+	padding: 10px 0;
+}
+
+.timelog-modal-body div .title {
+	width: 20%;
+	float: left;
+	margin-top: 5px;
+}
+
+.timelog-modal-body div input {
+	margin: 0px;
+}

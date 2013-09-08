@@ -1,0 +1,29 @@
+<div class="calendar">
+  <table>
+    <thead>
+      <tr class="text-center">
+        <th>
+          <button type="button" class="btn pull-left" ng-click="move(-1)"><i class="icon-chevron-left"></i></button>
+        </th>
+        <th colspan="{{rows[0].length - 2 + showWeekNumbers}}">
+          <strong>{{title}}</strong>
+        </th>
+        <th>
+          <button type="button" class="btn pull-right" ng-click="move(1)"><i class="icon-chevron-right"></i></button>
+        </th>
+      </tr>
+      <tr class="text-center" ng-show="labels.length > 0">
+        <th ng-repeat="label in labels">{{label}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="row in rows">
+        <td ng-repeat="dt in row" class="calendar-item text-center" ng-class="{'calendar-item-selected': dt.selected}" ng-click="select(dt.date)">
+          <div>
+            <span ng-class="{muted: dt.secondary}">{{dt.label}}</span>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
