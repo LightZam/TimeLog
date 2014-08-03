@@ -10,6 +10,7 @@
   <script type="text/javascript" src="lib/ui-bootstrap-calendar-0.1.0.js"></script>
   <script type="text/javascript" src="lib/ng-google-chart.js"></script>
   <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.css">
 
   <!-- logic js -->
 	<script type="text/javascript" src="js/signin.js"></script>
@@ -21,7 +22,8 @@
 </head>
 <body onselectstart=event.returnValue=false>
   <div ng-app="timelog" class="containr">	
-    <div class="top-bar">
+    <div class="top-bar" ng-controller="TopbarCtrl">
+      <div class="menu"  ng-click="showMunu()"><i class="icon-th-large"></i></div>
       <div class="title">Timelog</div>
       <div class="designed-by"sytle="float: right;">Designed by Zam</div>
     </div>

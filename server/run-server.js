@@ -18,7 +18,7 @@ db.once('open', function callback() {});
 var MemStore = express.session.MemoryStore;
 
 app.configure(function() {
-	app.set('port', process.env.PORT || 8000);
+	app.set('port', process.env.PORT || 7000);
     app.use(express.favicon(path.join(__dirname, '/favicon/favicon.ico')));
 	app.use(express.logger('dev'));
 	app.use(express.bodyParser());
@@ -50,6 +50,9 @@ app.post('/add/eventType', checkAuth, timelog.addEventType);
 app.put('/edit/eventType', checkAuth, timelog.editEventType);
 app.get('/get/eventType', checkAuth, timelog.getEventType);
 app.post('/add/timelog', checkAuth, timelog.addTimelog);
+app.get('/get/timelog/:date', checkAuth, timelog.getTimelogByDate);
+app.put('/edit/timelog', checkAuth, timelog.editTimelog);
+app.del('/delete/timelog/:_id', checkAuth, timelog.deleteTimelog);
 
 var server = http.createServer(app);
 reload(server, app);

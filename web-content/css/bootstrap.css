@@ -5111,9 +5111,9 @@ input[type="submit"].btn.btn-mini {
 .modal {
   position: fixed;
   top: 10%;
-  left: 55%;
+  left: 52%;
   z-index: 1050;
-  width: 400px;
+  width: 500px;
   margin-left: -280px;
   background-color: #ffffff;
   border: 1px solid #999;
@@ -5152,6 +5152,15 @@ input[type="submit"].btn.btn-mini {
 
 .modal-header .cclose {
   margin-top: 2px;
+}
+
+.modal-header .close {
+  style="color: #FFFFFF; 
+  cursor: pointer; 
+  font-size: 24px; 
+  position: absolute; 
+  top: 15px; 
+  right: 20px;
 }
 
 .modal-header h3 {

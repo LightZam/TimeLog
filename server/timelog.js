@@ -9,7 +9,7 @@ exports.signup = function(req, res, next) {
 		res.end('Input Account and Password');
 		return;
 	}
-	User.create(req.body, function (err, user) {
+	User.create(req.body, function(err, user) {
 		if (err) {
 			res.end('The Account has been used.');
 			return;
@@ -26,7 +26,7 @@ exports.signin = function(req, res, next) {
 		res.end('Input Account and Password');
 		return;
 	}
-	User.findOne(req.body, function (err, user) {
+	User.findOne(req.body, function(err, user) {
 		if (!user) {
 			res.end('Account or Password incorrect');
 			return;
@@ -43,7 +43,7 @@ exports.addEventType = function(req, res, next) {
 		return;
 	}
 	req.body.user = req.session.user._id;
-	EventType.create(req.body, function (err, result) {
+	EventType.create(req.body, function(err, result) {
 		if (err) {
 			res.end(err.toString());
 			return;
@@ -53,8 +53,11 @@ exports.addEventType = function(req, res, next) {
 }
 
 exports.getEventType = function(req, res, next) {
-	var query = { user: req.session.user._id, enable: true };
-	EventType.find(query, function (err, typeList) {
+	var query = {
+		user: req.session.user._id,
+		enable: true
+	};
+	EventType.find(query, function(err, typeList) {
 		if (err) {
 			res.end(err.toString());
 			return;
@@ -64,7 +67,9 @@ exports.getEventType = function(req, res, next) {
 }
 
 exports.editEventType = function(req, res, next) {
-	var update = { name: req.body.name };
+	var update = {
+		name: req.body.name
+	};
 	EventType.findByIdAndUpdate(req.body._id, update, function(err, result) {
 		if (err) {
 			res.end(err.toString());
@@ -81,12 +86,56 @@ exports.addTimelog = function(req, res, next) {
 		return;
 	}
 	req.body.user = req.session.user._id;
-	Timelog.create(req.body, function (err, result) {
+	Timelog.create(req.body, function(err, result) {
 		if (err) {
 			res.end(err.toString());
 			return;
 		}
 		console.log(result);
+		res.end('Success');
+	});
+}
+
+exports.getTimelogByDate = function(req, res, next) {
+	var query = {
+		user: req.session.user._id,
+		date: req.params.date
+	};
+	Timelog.find(query).populate('eventType').exec(function(err, logList) {
+		if (err) {
+			res.end(err.toString());
+			return;
+		}
+		res.send(logList);
+	});
+}
+
+exports.editTimelog = function(req, res, next) {
+	console.log(req);
+	req.body.user = req.session.user._id;
+	req.body.eventType = req.body.eventType._id;
+	var update = req.body;
+	update._id = undefined;
+	console.log(update);
+	Timelog.findByIdAndUpdate(req.body._id, update, function(err, result) {
+		if (err) {
+			res.end(err.toString());
+			return;
+		}
+		res.send(result);
+	});
+}
+
+exports.deleteTimelog = function(req, res, next) {
+	var query = {
+		user: req.session.user._id,
+		_id: req.params._id
+	};
+	Timelog.remove(query, function(err, result) {
+		if (err) {
+			res.end(err.toString());
+			return;
+		}
 		res.end('Success');
 	});
 }

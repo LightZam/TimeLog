@@ -5,7 +5,7 @@ var Schema = mongoose.Schema;
 var EventTypeSchema = new Schema({
     name: { type: String, require: true },
     enable: { type: Boolean, default: true },
-    user: { type: String, require: true }
+    user: { type: Schema.Types.ObjectId, ref: 'User', require: true }
 });
 
 module.exports = mongoose.model('EventType', EventTypeSchema);

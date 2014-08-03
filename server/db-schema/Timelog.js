@@ -10,8 +10,8 @@ var TimelogSchema = new Schema({
 	durationTime: String,
 	interruptTime: String,
 	description: String,
-    User: { type: String, require: true },
-    eventType: { type: String, require: true }
+    user: { type: Schema.Types.ObjectId, ref: 'User', require: true },
+    eventType: { type: Schema.Types.ObjectId, ref: 'EventType', require: true }
 });   
 
 module.exports = mongoose.model('Timelog', TimelogSchema);

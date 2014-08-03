@@ -1,5 +1,5 @@
-<div class="calendar">
-  <table>
+<div class="calendar" ng-mouseup="mouseUp($event)">
+  <table class="date-calendar">
     <thead>
       <tr class="text-center">
         <th>
@@ -26,4 +26,29 @@
       </tr>
     </tbody>
   </table>
+  <div class="right-sider" ng-modal="hour">
+    <table class="hour-calendar">
+      <tbody>
+        <div style="height: 0;">
+          <div class="drag-hour-wrap" ng-style="dragStyle" ng-click="cancel()"></div>
+        </div>
+        <div ng-repeat="group in groups" style="height: 0;">
+          <div class="day-group-time" ng-style="getPeriod(group)" ng-dblclick="editTimelog(group)">
+            <div>{{group.startTime}} - {{group.endTime}}</div>
+            <div>{{group.eventType.name}}</div>
+            <div>{{group.description}}</div>
+          </div>
+        </div>
+        <tr ng-repeat="hour in hours" class="hour-item">
+          <td class="hour-label">{{hour.hour12}}</td>
+          <td class="hour-item">
+            <div class="before-half-hour-item"  data-hour="{{hour.hour24}}" data-minute="00" ng-mousedown="mouseDown($event)" ng-mouseover="mouseOver($event)">
+            </div>
+            <div class="after-half-hour-item" data-hour="{{hour.hour24}}" data-minute="30" ng-mousedown="mouseDown($event)"  ng-mouseover="mouseOver($event)">
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>  
 </div>
